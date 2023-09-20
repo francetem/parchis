@@ -1,5 +1,3 @@
-{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
-
 module Lib
   ( Player (..),
     play,
@@ -58,9 +56,6 @@ startingPlayer seed = players !! rand
 
 play :: Int -> Player
 play = startingPlayer
-
-playerPlay :: Player -> Board -> Movement
-playerPlay _ _ = Movement 1 1
 
 initMove :: Movement
 initMove = Movement 0 1
@@ -144,6 +139,7 @@ makePlay :: Board -> Movement -> Player -> Board
 makePlay board theMove p = move board p (start theMove) (end theMove)
 
 extraMove :: Game -> Int -> Game
+extraMove game@(Game [] _ _ _ _ _) _ = game
 extraMove game@(Game bs@(originalBoard : _) initGen p _ _ m) amount
   | any (winner originalBoard m) players = game
   | null moveSet = game
@@ -182,7 +178,3 @@ simulate game@(Game bs@(originalBoard : _) initGen p d l m)
 
 winner :: Board -> Int -> Player -> Bool
 winner board m p = on 72 (playerPieces p board) == 4
-
--- \|| m > 1024
-
--- | | m > 1688c
